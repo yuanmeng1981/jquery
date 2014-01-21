@@ -108,6 +108,7 @@ jQuery.event = {
 				guid: handler.guid,
 				selector: selector,
 				needsContext: selector && jQuery.expr.match.needsContext.test( selector ),
+				matches: jQuery.find.compile( selector || "" ),
 				namespace: namespaces.join(".")
 			}, handleObjIn );
 
@@ -431,8 +432,9 @@ jQuery.event = {
 
 						if ( matches[ sel ] === undefined ) {
 							matches[ sel ] = handleObj.needsContext ?
-								jQuery( sel, this ).index( cur ) >= 0 :
-								jQuery.find( sel, this, null, [ cur ] ).length;
+								jQuery( sel, this ).index( cur ) > -1 :
+								// Use pre-compiled matching function
+								jQuery.find.select( handleObj.matches, this, null, [ cur ] ).length > 0;
 						}
 						if ( matches[ sel ] ) {
 							matches.push( handleObj );
